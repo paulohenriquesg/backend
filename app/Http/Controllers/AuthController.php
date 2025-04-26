@@ -1,0 +1,74 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Validator;
+
+class AuthController extends Controller
+{
+    /**
+     * Handle user login and token generation
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'device_name' => 'required|string',
+            'redirect' => 'required|string',
+        ], [
+            'device_name.required' => 'The device_name parameter is required.',
+            'redirect.required' => 'The redirect URL parameter is required.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput($request->except('password'));
+        }
+
+        if (! $this->validateRedirect($request)) {
+            return redirect()->back()
+                ->withErrors(['redirect' => 'Invalid redirect URL. It is not whitelisted.'])
+                ->withInput($request->except('password'));
+        }
+
+        if (! Auth::attempt($request->only('email', 'password'))) {
+            return redirect()->back()
+                ->withErrors(['email' => 'These credentials do not match our records.'])
+                ->withInput($request->except('password'));
+        }
+
+        $user = Auth::user();
+
+        $token = $user->createToken($request->get('device_name'))->plainTextToken;
+
+        $redirectLink = $request->get('redirect');
+
+        return redirect()->away($redirectLink)->withCookie(
+            Cookie::make('token', $token)
+                ->withSecure(false)
+                ->withDomain(
+                    parse_url($redirectLink, PHP_URL_HOST)
+                )
+        );
+    }
+
+    private function validateRedirect(Request $request): bool
+    {
+        $redirectUrl = $request->input('redirect');
+
+        foreach (config('app.redirect_hosts') as $host) {
+            if (str_starts_with($redirectUrl, $host)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
