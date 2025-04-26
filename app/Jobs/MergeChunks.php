@@ -45,15 +45,15 @@ class MergeChunks implements ShouldQueue
             $this->file->name,
         );
 
-        if (!Storage::disk('storage')->exists($destinationPathOnDisk)) {
+        if (! Storage::disk('storage')->exists($destinationPathOnDisk)) {
             $result = Storage::disk('storage')->makeDirectory($destinationPathOnDisk);
 
-            if (!$result) {
+            if (! $result) {
                 Log::error('Could not create directory for in storage', [
                     'path' => $destinationPathOnDisk,
                 ]);
 
-                throw new \RuntimeException("Could not create directory for in storage");
+                throw new \RuntimeException('Could not create directory for in storage');
             }
         }
 
@@ -61,23 +61,23 @@ class MergeChunks implements ShouldQueue
 
         $destinationStream = fopen($destinationPath, 'wb');
 
-        if (!$destinationStream) {
+        if (! $destinationStream) {
             Log::error('Could not open destination file for writing', [
                 'path' => $destinationPath,
             ]);
 
-            throw new \RuntimeException("Could not open destination file for writing");
+            throw new \RuntimeException('Could not open destination file for writing');
         }
 
         try {
             $uploads = $this->file->uploads()->orderBy('number')->get();
 
             foreach ($uploads as $upload) {
-                $chunkPath = sprintf('%s/%s', $this->file->id, $upload->id . '.chunk');
+                $chunkPath = sprintf('%s/%s', $this->file->id, $upload->id.'.chunk');
 
                 $chunkStream = fopen(Storage::disk('chunk_uploads')->path($chunkPath), 'rb');
 
-                if (!$chunkStream) {
+                if (! $chunkStream) {
                     Log::error('Could not open chunk file', [
                         'path' => Storage::disk('chunk_uploads')->path($chunkPath),
                     ]);
@@ -119,8 +119,6 @@ class MergeChunks implements ShouldQueue
     }
 
     /**
-     * @param string $destinationPath
-     * @return void
      * @throws \Exception
      */
     public function checkChecksum(string $destinationPath): void
@@ -137,7 +135,7 @@ class MergeChunks implements ShouldQueue
             $this->file->status_id = Status::where('name', Status::FAILED_CHECKSUM)->first()->id;
             $this->file->save();
 
-            throw new \Exception("File checksum does not match");
+            throw new \Exception('File checksum does not match');
         }
     }
 
@@ -149,7 +147,7 @@ class MergeChunks implements ShouldQueue
             ]);
 
             $result = Storage::disk('chunk_uploads')->delete($this->file->id);
-            if (!$result) {
+            if (! $result) {
                 Log::error('Could not delete chunks for successfully uploaded file', [
                     'path' => Storage::disk('chunk_uploads')->path($this->file->id),
                     'file_id' => $this->file->id,
