@@ -7,9 +7,18 @@ use Illuminate\Support\Facades\Route;
 use Orion\Facades\Orion;
 
 Route::group(['as' => 'api.'], function () {
-    Orion::resource('files', FileController::class);
+    Orion::resource('files', FileController::class)
+        ->except([
+            'batch',
+            'batchStore',
+            'batchUpdate',
+            'batchRestore',
+            'batchDestroy',
+            'restore',
+        ])->withoutMiddleware(VerifyCsrfToken::class);
     Orion::hasManyResource('files', 'uploads', UploadController::class)
         ->except([
+            'index',
             'search',
             'batch',
             'batchStore',

@@ -20,6 +20,11 @@ class Upload extends Model
     protected $hidden = [
         'file_id',
         'status_id',
+        'status',
+    ];
+
+    protected $appends = [
+        'status_name',
     ];
 
     public function file(): BelongsTo
@@ -30,5 +35,10 @@ class Upload extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function getStatusNameAttribute(): ?string
+    {
+        return $this->status?->name;
     }
 }

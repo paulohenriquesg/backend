@@ -1,11 +1,11 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "files-nest/backend",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A backend for Files Nest, a files backup platform.",
     "keywords": [
-        "laravel",
-        "framework"
+        "files-nest",
+        "backup"
     ],
     "license": "GNU AGPLv3",
     "require": {

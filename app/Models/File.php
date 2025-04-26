@@ -15,7 +15,6 @@ class File extends Model
     protected $fillable = [
         'name',
         'create_datetime',
-        'path',
         'checksum',
     ];
 
@@ -27,6 +26,11 @@ class File extends Model
         'user_id',
         'path',
         'status_id',
+        'status',
+    ];
+
+    protected $appends = [
+        'status_name',
     ];
 
     public function user(): BelongsTo
@@ -42,5 +46,10 @@ class File extends Model
     public function uploads(): HasMany
     {
         return $this->hasMany(Upload::class);
+    }
+
+    public function getStatusNameAttribute(): ?string
+    {
+        return $this->status?->name;
     }
 }

@@ -10,19 +10,19 @@ return [
     ],
     'specs' => [
         'info' => [
-            'title' => env('APP_NAME'),
-            'description' => null,
-            'terms_of_service' => null,
-            'contact' => [
-                'name' => null,
-                'url' => null,
-                'email' => null,
-            ],
+            'title' => 'Files Nest',
+            'description' => 'API for Files Nest.',
+            // 'terms_of_service' => null,
+            // 'contact' => [
+            //     'name' => null,
+            //     'url' => null,
+            //     'email' => null,
+            // ],
             'license' => [
-                'name' => null,
-                'url' => null,
+                'name' => 'GNU AGPLv3',
+                'url' => 'https://www.gnu.org/licenses/agpl-3.0.html',
             ],
-            'version' => '1.0.0',
+            'version' => '0.0.1',
         ],
         'servers' => [
             ['url' => env('APP_URL').'/api', 'description' => 'Default Environment'],
@@ -33,7 +33,7 @@ return [
         'enabled' => false,
     ],
     'search' => [
-        'case_sensitive' => true, // TODO: set to "false" by default in 3.0 release
+        'case_sensitive' => true,
         /*
          |--------------------------------------------------------------------------
          | Max Nested Depth

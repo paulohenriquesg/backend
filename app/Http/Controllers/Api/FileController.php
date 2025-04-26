@@ -39,14 +39,17 @@ class FileController extends Controller
                     'number' => $i + 1,
                     'file_id' => $entity->id,
                     'status_id' => $inProgressStatusId,
-                    'path' => config('app.chunks_upload_folder_path')."/$entity->id",
                 ]);
             }
         });
     }
 
-    // todo: add proper upload status to a response when querying with relations
-    public function alwaysIncludes(): array
+    public function filterableBy(): array
+    {
+        return ['name', 'create_datetime', 'created_at', 'updated_at'];
+    }
+
+    public function includes(): array
     {
         return [
             'uploads',
