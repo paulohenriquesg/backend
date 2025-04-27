@@ -107,6 +107,8 @@ function send_request(string $url, string $method = 'POST', ?array $jsonData = n
     $responseData = json_decode($responseBody, true);
 
     // Allow successful PUT requests with potentially empty bodies (like chunk uploads)
+    echo "HTTP code $httpCode \n";
+
     if ($httpCode >= 400) {
         return ['success' => false, 'http_code' => $httpCode, 'error' => "API Error (HTTP {$httpCode}): ".($responseData['message'] ?? $responseBody), 'body' => $responseData];
     }

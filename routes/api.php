@@ -9,6 +9,7 @@ use Orion\Facades\Orion;
 Route::group(['as' => 'api.'], function () {
     Orion::resource('files', FileController::class)
         ->except([
+            'update',
             'batch',
             'batchStore',
             'batchUpdate',
@@ -18,7 +19,6 @@ Route::group(['as' => 'api.'], function () {
         ])->withoutMiddleware(VerifyCsrfToken::class);
     Orion::hasManyResource('files', 'uploads', UploadController::class)
         ->except([
-            'index',
             'search',
             'batch',
             'batchStore',
