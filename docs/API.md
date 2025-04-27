@@ -139,6 +139,8 @@ Content-Type: application/json
 
 #### Description
 Create a new file. The request body should include the file name, creation date, checksum. The response includes data about the created file, such as its ID, name, creation date, checksum, and status. And the response also includes a list of uploads associated with the file, including their IDs, numbers, statuses, and timestamps.
+File name is unique. It's impossible to recreate a file with the same name as an existing one (despite a status).
+If you want to restart an upload process, you need to remove the file first.
 
 #### Headers
 ```http
@@ -205,6 +207,33 @@ Content-Type: application/json
                 "status_name": "in_progress"
             }
         ]
+    }
+}
+```
+
+### DELETE `/api/files/{file_id}`
+
+#### Description
+Delete a specific file by its ID. The response includes an old data about the deleted file, such as its ID, name, creation date, checksum, and status.
+
+#### Headers
+```http
+Authorization: Bearer {token}
+Accept: application/json
+Content-Type: application/json
+```
+
+#### Response (HTTP code 200)
+```json
+{
+    "data": {
+        "id": 13,
+        "name": "amazon_food_reviews.zip",
+        "create_datetime": "2020-01-01 00:00:00",
+        "checksum": "35617deab30259912a1a4f46b915d9ffd3fb4e6fd657bd573635edb9d4e317a7",
+        "created_at": "2025-04-26T14:53:22.000000Z",
+        "updated_at": "2025-04-26T14:53:35.000000Z",
+        "status_name": "completed"
     }
 }
 ```
