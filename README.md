@@ -4,6 +4,7 @@
 ## Development
 
 ### Before
+* `cp .env.example .env`
 * `touch database/queues-sqlite.db`
 * `touch database/database.db`
 * `php artisan migrate --seed`
@@ -13,6 +14,9 @@
 * `php artisan serve`
 * `pnpm dev`
 * `pnpm build`
+
+### Queues
+* `php artisan queue:listen` run a scheduled jobs listener
 
 ### Login
 Redirect should be whitelisted in `config/app.php` file.
