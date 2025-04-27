@@ -24,6 +24,15 @@ class UploadController extends RelationController
      */
     protected function performUpdate(Request $request, Model $parentEntity, Model $entity, array $attributes, array $pivot): void
     {
+        if ($request->header('content-type') !== 'application/octet-stream') {
+            Log::error('Invalid content type', [
+                'content_type' => $request->getContentType(),
+                'upload_id' => $entity->id,
+            ]);
+
+            throw new HttpException(400, 'Invalid content type');
+        }
+
         $fileContent = $request->getContent();
 
         if (! Storage::disk('chunk_uploads')->exists($entity->file->id)) {
