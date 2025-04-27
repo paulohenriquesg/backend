@@ -127,6 +127,4 @@ return [
         'photos-nest://auth',
         'http://127.0.0.1:8000',
     ],
-
-    'chunks_upload_folder_path' => env('CHUNKS_UPLOAD_FOLDER_PATH', 'app/uploads'),
 ];
