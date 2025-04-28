@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -50,13 +49,23 @@ class AuthController extends Controller
 
         $redirectLink = $request->get('redirect');
 
-        return redirect()->away($redirectLink)->withCookie(
-            Cookie::make('token', $token)
-                ->withSecure(false)
-                ->withDomain(
-                    parse_url($redirectLink, PHP_URL_HOST)
+        return redirect()
+            ->route('login.success', [
+                'redirect' => $redirectLink,
+            ])
+            ->withCookie(
+                cookie(
+                    'token',
+                    $token,
+                    1,
+                    '/',
+                    parse_url(config('app.url'), PHP_URL_HOST),
+                    config('session.secure'),
+                    false,
+                    false,
+                    'Lax'
                 )
-        );
+            );
     }
 
     private function validateRedirect(Request $request): bool
