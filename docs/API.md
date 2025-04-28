@@ -350,7 +350,7 @@ Content-Type: application/octet-stream
 binary data
 
 #### Response (HTTP code 200)
-```json`
+```json
 {
     "data": {
         "id": 27,

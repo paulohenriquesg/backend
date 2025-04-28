@@ -4,11 +4,16 @@
 ## Development
 
 ### Before
-* `cp .env.example .env`
-* `touch database/queues-sqlite.db`
-* `touch database/database.db`
-* `php artisan migrate --seed`
-* `php artisan migrate --database=queues-sqlite --path=database/migrations/queues`
+```shell
+cp .env.example .env
+touch database/queues-sqlite.sqlite
+touch database/database.sqlite
+composer install
+php artisan key:generate
+php artisan migrate --seed
+php artisan migrate --database=queues-sqlite --path=database/migrations/queues
+pnpm build
+```
 
 ### Server
 * `php artisan serve`
