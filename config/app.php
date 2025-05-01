@@ -124,7 +124,7 @@ return [
     ],
 
     'redirect_hosts' => [
-        'photos-nest://auth',
+        'filesnest://auth',
         'http://127.0.0.1:8000',
     ],
 ];

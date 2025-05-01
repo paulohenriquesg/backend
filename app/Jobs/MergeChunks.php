@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\File;
 use App\Models\Status;
-use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -42,17 +41,8 @@ class MergeChunks implements ShouldQueue
             return;
         }
 
-        $carbonFileDate = Carbon::make($this->file->create_datetime);
-
-        $destinationPathOnDisk = sprintf('%04d/%02d/%02d',
-            $carbonFileDate->year,
-            $carbonFileDate->month,
-            $carbonFileDate->day
-        );
-        $destinationPathNameOnDisk = sprintf('%s/%s',
-            $destinationPathOnDisk,
-            $this->file->name,
-        );
+        $destinationPathOnDisk = $this->file->getDestinationPathOnDisk();
+        $destinationPathNameOnDisk = $this->file->getDestinationPathNameOnDisk();
 
         if (! Storage::disk('storage')->exists($destinationPathOnDisk)) {
             $result = Storage::disk('storage')->makeDirectory($destinationPathOnDisk);
@@ -118,9 +108,6 @@ class MergeChunks implements ShouldQueue
 
                 stream_copy_to_stream($chunkStream, $destinationStream);
                 fclose($chunkStream);
-
-                // Delete the chunk after it has been merged
-                // Storage::delete($chunkPath);
             }
 
             fclose($destinationStream);
@@ -135,9 +122,20 @@ class MergeChunks implements ShouldQueue
                 $this->file->uploads()->delete();
             });
 
+            if (! touch(Storage::disk('storage')->path($destinationPathNameOnDisk), $this->file->create_datetime->timestamp)) {
+                Log::error('Could change file creation timestamp', [
+                    'path' => Storage::disk('storage')->path($destinationPathNameOnDisk),
+                    'command' => 'MergeChunks',
+                ]);
+            }
+
             $this->deleteChunksFolder();
 
         } catch (\RuntimeException $e) {
+            if (isset($chunkStream) && is_resource($chunkStream)) {
+                fclose($chunkStream);
+            }
+
             if (is_resource($destinationStream)) {
                 fclose($destinationStream);
             }

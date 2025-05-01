@@ -52,4 +52,22 @@ class File extends Model
     {
         return $this->status?->name;
     }
+
+    public function getDestinationPathOnDisk(): string
+    {
+        return sprintf('%s/%04d/%02d/%02d',
+            $this->user->email,
+            $this->create_datetime->year,
+            $this->create_datetime->month,
+            $this->create_datetime->day
+        );
+    }
+
+    public function getDestinationPathNameOnDisk(): string
+    {
+        return sprintf('%s/%s',
+            $this->getDestinationPathOnDisk(),
+            $this->name,
+        );
+    }
 }
