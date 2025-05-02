@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -48,6 +49,11 @@ class AuthController extends Controller
         $token = $user->createToken($request->get('device_name'))->plainTextToken;
 
         $redirectLink = $request->get('redirect');
+        $cookieDomain = parse_url(config('app.url'), PHP_URL_HOST);
+
+        Log::debug('Auth cookie domain', [
+            'cookie_domain' => $cookieDomain,
+        ]);
 
         return redirect()
             ->route('login.success', [
@@ -59,7 +65,7 @@ class AuthController extends Controller
                     $token,
                     1,
                     '/',
-                    parse_url(config('app.url'), PHP_URL_HOST),
+                    $cookieDomain,
                     config('session.secure'),
                     false,
                     false,
@@ -71,6 +77,11 @@ class AuthController extends Controller
     private function validateRedirect(Request $request): bool
     {
         $redirectUrl = $request->input('redirect');
+
+        Log::debug('Validate redirect URL', [
+            'redirect_url' => $redirectUrl,
+            'allowed_hosts' => config('app.redirect_hosts'),
+        ]);
 
         foreach (config('app.redirect_hosts') as $host) {
             if (str_starts_with($redirectUrl, $host)) {

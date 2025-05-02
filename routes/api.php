@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\FileController;
+use App\Http\Controllers\Api\SettingsController;
 use App\Http\Controllers\Api\UploadController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
@@ -37,4 +38,7 @@ Route::group(['as' => 'api.'], function () {
             'toggle',
             'updatePivot',
         ]);
+    Route::get('settings', [SettingsController::class, 'get'])->middleware([
+        'auth:sanctum',
+    ]);
 })->withoutMiddleware(VerifyCsrfToken::class);
