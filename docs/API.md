@@ -3,6 +3,33 @@
 ## Authorization
 * Authorization is done using a Bearer token. The token is passed in the `Authorization` header of the request.
 
+## Settings
+
+### GET `/api/settings`
+
+#### Description
+Get the current settings of the application. The response includes data about the settings, such as the maximum upload size (bytes).
+
+#### Headers
+```http
+Authorization: Bearer {token}
+Accept: application/json
+Content-Type: application/json
+```
+
+#### Response
+```json
+{
+    "data": {
+        "upload_max_size": 2097152
+    }
+}
+```
+
+
+
+
+
 ## Files
 
 ### GET `/api/files`
@@ -41,14 +68,47 @@ Content-Type: application/json
             "status_name": "in_progress"
         }
     ],
+    "links": {
+        "first": "http://host/api/files?page=1",
+        "last": "http://host/api/files?page=3",
+        "prev": null,
+        "next": "http://host/api/files?page=2"
+    },
     "meta": {
         "current_page": 1,
         "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/127.0.0.1:8000\/api\/files",
+        "last_page": 3,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://host/api/files?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": "http://host/api/files?page=2",
+                "label": "2",
+                "active": false
+            },
+            {
+                "url": "http://host/api/files?page=3",
+                "label": "3",
+                "active": false
+            },
+            {
+                "url": "http://host/api/files?page=2",
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://host/api/files",
         "per_page": 15,
-        "to": 6,
-        "total": 6
+        "to": 15,
+        "total": 45
     }
 }
 ```
@@ -123,14 +183,37 @@ Content-Type: application/json
             "status_name": "completed"
         }
     ],
+    "links": {
+        "first": "http://host/api/files/search?page=1",
+        "last": "http://host/api/files/search?page=1",
+        "prev": null,
+        "next": null
+    },
     "meta": {
         "current_page": 1,
-        "from": 1,
+        "from": null,
         "last_page": 1,
-        "path": "http:\/\/127.0.0.1:8000\/api\/files",
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://host/api/files/search?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": "http://host/api/files?page=2",
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://host/api/files/search",
         "per_page": 15,
-        "to": 6,
-        "total": 6
+        "to": null,
+        "total": 0
     }
 }
 ```
@@ -297,14 +380,37 @@ Content-Type: application/json
             "status_name": "in_progress"
         }
     ],
+    "links": {
+        "first": "http://host/api/files/353/uploads?page=1",
+        "last": "http://host/api/files/353/uploads?page=1",
+        "prev": null,
+        "next": null
+    },
     "meta": {
         "current_page": 1,
         "from": 1,
         "last_page": 1,
-        "path": "http:\/\/127.0.0.1:8000\/api\/files",
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://host/api/files/353/uploads?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://host/api/files/353/uploads",
         "per_page": 15,
-        "to": 6,
-        "total": 6
+        "to": 2,
+        "total": 2
     }
 }
 ```
