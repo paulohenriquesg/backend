@@ -17,7 +17,7 @@
             <div class="hero-content flex-col lg:flex-row-reverse">
                 <div class="text-center lg:text-left lg:ml-8">
                     <h1 class="text-5xl font-bold">Login</h1>
-                    <p class="py-6">Access your Photos Nest account to manage your photos and memories safely in the cloud.</p>
+                    <p class="py-6">Access your {{ config('app.name') }} account to manage your photos and memories safely in the cloud.</p>
                 </div>
                 <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <div class="card-body">

@@ -17,6 +17,7 @@ pnpm build
 
 ### Server
 * `php artisan serve`
+* `pnpm install`
 * `pnpm dev`
 * `pnpm build`
 
@@ -26,7 +27,7 @@ pnpm build
 ### Login
 Redirect should be whitelisted in `config/app.php` file.
 ```php
-'redirect_hosts' => [
+'redirect_urls_whitelist' => [
     'http://127.0.0.1:8000',
 ],
 ```

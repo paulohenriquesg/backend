@@ -49,11 +49,6 @@ class AuthController extends Controller
         $token = $user->createToken($request->get('device_name'))->plainTextToken;
 
         $redirectLink = $request->get('redirect');
-        $cookieDomain = parse_url(config('app.url'), PHP_URL_HOST);
-
-        Log::debug('Auth cookie domain', [
-            'cookie_domain' => $cookieDomain,
-        ]);
 
         return redirect()
             ->route('login.success', [
@@ -65,7 +60,7 @@ class AuthController extends Controller
                     $token,
                     1,
                     '/',
-                    $cookieDomain,
+                    null,
                     config('session.secure'),
                     false,
                     false,
@@ -80,10 +75,10 @@ class AuthController extends Controller
 
         Log::debug('Validate redirect URL', [
             'redirect_url' => $redirectUrl,
-            'allowed_hosts' => config('app.redirect_hosts'),
+            'allowed_hosts' => config('app.redirect_urls_whitelist'),
         ]);
 
-        foreach (config('app.redirect_hosts') as $host) {
+        foreach (config('app.redirect_urls_whitelist') as $host) {
             if (str_starts_with($redirectUrl, $host)) {
                 return true;
             }
