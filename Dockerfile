@@ -34,7 +34,10 @@ ENV SERVER_NAME=:8080 \
     POST_MAX_SIZE=50M
 
 WORKDIR /app
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && apt-get update && apt-get install -y supervisor \
+    && mkdir -p /var/log/supervisor \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions required by Laravel and your app
 # Ensure opcache is installed and enabled
@@ -61,7 +64,7 @@ RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cac
 # Expose port and set entrypoint/cmd
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["frankenphp", "run", "--config", "/app/docker/Caddyfile"]
+CMD ["supervisord", "-c", "/app/docker/supervisord.conf"]
 
 # Healthcheck (optional)
 # HEALTHCHECK --interval=30s --timeout=3s \

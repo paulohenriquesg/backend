@@ -35,9 +35,10 @@ class FileController extends Controller
             $entity->save();
 
             for ($i = 0; $i < $request->get('chunks_count', 1); $i++) {
+                $fileId = $entity->id;
                 $entity->uploads()->create([
                     'number' => $i + 1,
-                    'file_id' => $entity->id,
+                    'file_id' => $fileId,
                     'status_id' => $inProgressStatusId,
                 ]);
             }
