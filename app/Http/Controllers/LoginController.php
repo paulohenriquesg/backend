@@ -6,9 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
-class AuthController extends Controller
+class LoginController extends Controller
 {
+    public function view(Request $request): View
+    {
+        $deviceName = $request->get('device_name');
+        $redirect = $request->get('redirect');
+
+        return view('login', compact('deviceName', 'redirect'));
+    }
+
     /**
      * Handle user login and token generation
      *
