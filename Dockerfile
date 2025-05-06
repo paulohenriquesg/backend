@@ -59,7 +59,8 @@ COPY --from=frontend_builder /app/public/build /app/public/build/
 # Set permissions for storage and bootstrap/cache (adjust user/group if needed)
 RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
     && chown -R www-data:www-data ./* \
-    && chmod -R 775 storage bootstrap/cache
+    && chmod -R 775 storage bootstrap/cache \
+    && chmod -R 770 database/mount
 
 # Expose port and set entrypoint/cmd
 EXPOSE 8080
