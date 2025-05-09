@@ -28,6 +28,8 @@ class MergeChunks implements ShouldQueue
     {
         $completedStatusId = Status::where('name', Status::COMPLETED)->first()->id;
 
+        $this->file->refresh();
+
         if ($this->file->status_id === $completedStatusId) {
             Log::debug('File already completed', [
                 'file_id' => $this->file->id,

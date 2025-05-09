@@ -41,4 +41,6 @@ Route::group(['as' => 'api.'], function () {
     Route::get('settings', [SettingsController::class, 'get'])->middleware([
         'auth:sanctum',
     ]);
-})->withoutMiddleware(VerifyCsrfToken::class);
+})->middleware([
+    'force.json.response',
+])->withoutMiddleware(VerifyCsrfToken::class);
