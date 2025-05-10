@@ -32,4 +32,12 @@ php artisan optimize
 php artisan migrate --seed --force --no-interaction
 php artisan migrate --database=queues-sqlite --path=database/migrations/queues --force --no-interaction
 
+# Ensure the database files are writable by www-data
+if [ -d "/app/database/mount" ]; then
+    # Chown the directory and its contents to www-data
+    chown -R www-data:www-data /app/database/mount
+    # Ensure www-data has rwx on the directory and rw on files
+    chmod -R u+rwX,g+rwX /app/database/mount
+fi
+
 exec "$@"
