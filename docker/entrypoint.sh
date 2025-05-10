@@ -28,15 +28,47 @@ opcache.revalidate_freq=0
 opcache.save_comments=1
 EOF
 
+# PUID/PGID Synchronization
+# Environment variables PUID and PGID can be set to specify the desired UID/GID for www-data.
+TARGET_UID="$PUID"
+TARGET_GID="$PGID"
+
+CURRENT_WWW_DATA_UID=$(id -u www-data)
+CURRENT_WWW_DATA_GROUP_GID=$(getent group www-data | cut -d: -f3)
+
+# Change GID of 'www-data' group if TARGET_GID is set and different
+if [ -n "$TARGET_GID" ] && [ "$CURRENT_WWW_DATA_GROUP_GID" != "$TARGET_GID" ]; then
+    echo "Changing GID of 'www-data' group from $CURRENT_WWW_DATA_GROUP_GID to $TARGET_GID"
+    # Check if a group with TARGET_GID already exists and is not 'www-data'
+    EXISTING_GROUP_WITH_TARGET_GID=$(getent group "$TARGET_GID" | cut -d: -f1)
+    if [ -n "$EXISTING_GROUP_WITH_TARGET_GID" ] && [ "$EXISTING_GROUP_WITH_TARGET_GID" != "www-data" ]; then
+        echo "Warning: GID $TARGET_GID is already in use by group '$EXISTING_GROUP_WITH_TARGET_GID'."
+        echo "Attempting to change GID of 'www-data' group to $TARGET_GID (non-unique)."
+        groupmod -o -g "$TARGET_GID" www-data
+    else
+        # GID is free, or already belongs to 'www-data' (but getent reported different - rare), or no group has this GID
+        groupmod -g "$TARGET_GID" www-data
+    fi
+fi
+
+# Change UID of 'www-data' user if TARGET_UID is set and different
+if [ -n "$TARGET_UID" ] && [ "$CURRENT_WWW_DATA_UID" != "$TARGET_UID" ]; then
+    echo "Changing UID of 'www-data' user from $CURRENT_WWW_DATA_UID to $TARGET_UID"
+    usermod -o -u "$TARGET_UID" www-data
+fi
+
+# Run Laravel specific commands (migrations, cache, etc.)
+# These are run as root; subsequent chown will fix permissions for www-data.
 php artisan optimize
 php artisan migrate --seed --force --no-interaction
 php artisan migrate --database=queues-sqlite --path=database/migrations/queues --force --no-interaction
 
-# Ensure the database files are writable by www-data
+# Ensure key Laravel directories and database mount are writable by the (potentially new) www-data user/group.
+echo "Ensuring www-data ownership and permissions for storage, bootstrap/cache, and database/mount..."
+chown -R www-data:www-data /app/storage /app/bootstrap/cache
+
 if [ -d "/app/database/mount" ]; then
-    # Chown the directory and its contents to www-data
     chown -R www-data:www-data /app/database/mount
-    # Ensure www-data has rwx on the directory and rw on files
     chmod -R u+rwX,g+rwX /app/database/mount
 fi
 
