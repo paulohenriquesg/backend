@@ -4,6 +4,7 @@ set -e
 # Default values if environment variables are not set
 : ${POST_MAX_SIZE:=128M}
 : ${MEMORY_LIMIT:=128M}
+: ${MAX_EXECUTION_TIME:=60}
 
 # Export the variables so envsubst can use them
 export POST_MAX_SIZE
@@ -15,7 +16,7 @@ cat > /usr/local/etc/php/conf.d/custom.ini << EOF
 post_max_size = ${POST_MAX_SIZE}
 upload_max_filesize = ${POST_MAX_SIZE}
 memory_limit = ${MEMORY_LIMIT}
-max_execution_time = 30
+max_execution_time = ${MAX_EXECUTION_TIME}
 
 ; OPcache settings
 opcache.enable=1

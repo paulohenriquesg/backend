@@ -37,24 +37,23 @@ WORKDIR /app
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && apt-get update && apt-get install -y supervisor \
     && mkdir -p /var/log/supervisor \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install PHP extensions required by Laravel and your app
-# Ensure opcache is installed and enabled
-RUN install-php-extensions \
-	pdo_sqlite \
-	gd \
-	intl \
-	zip \
-	opcache
-
-COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+    && apt-get clean && rm -rf /var/lib/apt/lists/* \
+    # Install PHP extensions required by Laravel and your app
+    # Ensure opcache is installed and enabled
+    && install-php-extensions \
+        pdo_sqlite \
+        gd \
+        intl \
+        zip \
+        opcache
 
 # Copy built vendor dependencies
 COPY --from=vendor /app/vendor /app/vendor
 COPY . /app
 COPY --from=frontend_builder /app/public/build /app/public/build/
+
+COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set permissions for storage and bootstrap/cache (adjust user/group if needed)
 RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
