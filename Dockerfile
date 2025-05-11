@@ -24,6 +24,9 @@ RUN pnpm run build
 # Stage 3: Final production image
 FROM dunglas/frankenphp AS frankenphp_runtime
 
+ARG APP_VERSION
+ENV APP_VERSION=$APP_VERSION
+
 # Set environment variables defaults (can be overridden at runtime)
 ENV SERVER_NAME=:8080 \
     APP_ENV=production \
