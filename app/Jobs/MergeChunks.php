@@ -50,12 +50,12 @@ class MergeChunks implements ShouldQueue
             $result = Storage::disk('storage')->makeDirectory($destinationPathOnDisk);
 
             if (! $result) {
-                Log::error('Could not create directory for in storage', [
+                Log::error('Could not create directory in the storage', [
                     'path' => $destinationPathOnDisk,
                     'command' => 'MergeChunks',
                 ]);
 
-                throw new \RuntimeException('Could not create directory for in storage');
+                throw new \RuntimeException('Could not create directory in the storage');
             }
         }
 
