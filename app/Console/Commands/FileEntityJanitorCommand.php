@@ -17,7 +17,7 @@ class FileEntityJanitorCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:janitor:file-entity {--dry-run : Run without making changes}';
+    protected $signature = 'app:janitor:file-entity {--dry-run : Run without making changes} {--now : Cleanup all stale file entities starting from now}';
 
     /**
      * The console command description.
@@ -33,27 +33,30 @@ class FileEntityJanitorCommand extends Command
     {
         $this->info('Starting janitor cleanup process...');
         $dryRun = $this->option('dry-run');
+        $now = $this->option('now');
 
         if ($dryRun) {
             $this->warn('Running in dry-run mode. No changes will be made.');
         }
 
-        $this->cleanupStaleFileEntities($dryRun);
+        $this->cleanupStaleFileEntities($dryRun, $now);
         $this->cleanupStaleUploadEntities($dryRun);
 
         $this->info('Janitor cleanup process completed.');
     }
 
-    private function cleanupStaleFileEntities(bool $dryRun): void
+    private function cleanupStaleFileEntities(bool $dryRun, bool $now = false): void
     {
         $completedStatusId = Status::where('name', Status::COMPLETED)->first()->id;
         $cutoffDate = Carbon::now()->subDay();
 
-        $staleFiles = File::where('status_id', '!=', $completedStatusId)
-            ->where('created_at', '<', $cutoffDate)
-            ->cursor();
+        $staleFilesQuery = File::where('status_id', '!=', $completedStatusId);
 
-        foreach ($staleFiles as $file) {
+        if (!$now) {
+            $staleFilesQuery->where('created_at', '<', $cutoffDate);
+        }
+
+        foreach ($staleFilesQuery->cursor() as $file) {
             $this->info("Processing file ID: {$file->id}, status: {$file->status_id}, created: {$file->created_at}");
             Log::debug('Processing file', [
                 'file_id' => $file->id,
@@ -114,7 +117,7 @@ class FileEntityJanitorCommand extends Command
             }
         }
 
-        $this->info("Completed cleaning up {$staleFiles->count()} stale files.");
+        $this->info("Completed cleaning up stale files.");
     }
 
     private function cleanupStaleUploadEntities(bool $dryRun): void
