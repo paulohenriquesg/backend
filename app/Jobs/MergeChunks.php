@@ -40,6 +40,11 @@ class MergeChunks implements ShouldQueue
         }
 
         if ($this->file->uploads()->where('status_id', '!=', $completedStatusId)->exists()) {
+            Log::debug('File does not have completed uploads', [
+                'file_id' => $this->file->id,
+                'command' => 'MergeChunks',
+            ]);
+
             return;
         }
 
