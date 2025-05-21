@@ -52,7 +52,7 @@ class FileEntityJanitorCommand extends Command
 
         $staleFilesQuery = File::where('status_id', '!=', $completedStatusId);
 
-        if (!$now) {
+        if (! $now) {
             $staleFilesQuery->where('created_at', '<', $cutoffDate);
         }
 
@@ -117,7 +117,7 @@ class FileEntityJanitorCommand extends Command
             }
         }
 
-        $this->info("Completed cleaning up stale files.");
+        $this->info('Completed cleaning up stale files.');
     }
 
     private function cleanupStaleUploadEntities(bool $dryRun): void
