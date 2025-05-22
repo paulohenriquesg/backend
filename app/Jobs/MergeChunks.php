@@ -39,6 +39,15 @@ class MergeChunks implements ShouldQueue
             return;
         }
 
+        if ($this->file->checksum === null) {
+            Log::debug('File does not have checksum', [
+                'file_id' => $this->file->id,
+                'command' => 'MergeChunks',
+            ]);
+
+            return;
+        }
+
         if ($this->file->uploads()->where('status_id', '!=', $completedStatusId)->exists()) {
             Log::debug('File does not have completed uploads', [
                 'file_id' => $this->file->id,

@@ -10,7 +10,6 @@ use Orion\Facades\Orion;
 Route::group(['as' => 'api.'], function () {
     Orion::resource('files', FileController::class)
         ->except([
-            'update',
             'batch',
             'batchStore',
             'batchUpdate',

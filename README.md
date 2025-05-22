@@ -6,8 +6,8 @@
 ### Before
 ```shell
 cp .env.example .env
-touch database/queues-sqlite.sqlite
-touch database/database.sqlite
+touch database/mount/queues-sqlite.sqlite
+touch database/mount/database.sqlite
 composer install
 php artisan key:generate
 php artisan migrate --seed

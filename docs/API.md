@@ -221,7 +221,7 @@ Content-Type: application/json
 ### POST `/api/files`
 
 #### Description
-Create a new file. The request body should include the file name, creation date, checksum. The response includes data about the created file, such as its ID, name, creation date, checksum, and status. And the response also includes a list of uploads associated with the file, including their IDs, numbers, statuses, and timestamps.
+Create a new file. The request body should include the file name, creation date. Checksum is optional. The response includes data about the created file, such as its ID, name, creation date, checksum, and status. And the response also includes a list of uploads associated with the file, including their IDs, numbers, statuses, and timestamps.
 File name is unique. It's impossible to recreate a file with the same name as an existing one (despite a status).
 If you want to restart an upload process, you need to remove the file first.
 
@@ -249,7 +249,7 @@ Content-Type: application/json
         "id": 26,
         "name": "name6.jpg",
         "create_datetime": "2020-12-01 15:00:00",
-        "checksum": "123",
+        "checksum": "",
         "created_at": "2025-04-27T15:00:15.000000Z",
         "updated_at": "2025-04-27T15:00:15.000000Z",
         "status_name": "in_progress",
@@ -428,6 +428,38 @@ Content-Type: application/json
 ```
 
 #### Response
+```json
+{
+    "data": {
+        "id": 27,
+        "number": 1,
+        "status_name": "completed",
+        "created_at": "2025-04-26T20:46:14.000000Z",
+        "updated_at": "2025-04-26T20:46:14.000000Z"
+    }
+}
+```
+
+### PATCH `/api/files/{file_id}`
+
+#### Description
+Update a specific file by its ID. The request body could include the file name, creation date, checksum. The response includes data about the updated file, such as its ID, name, creation date, checksum, and status. And the response also includes a list of uploads associated with the file, including their IDs, numbers, statuses, and timestamps.
+
+#### Headers
+```http
+Authorization: Bearer {token}
+Accept: application/json
+Content-Type: application/json
+```
+
+#### Request
+```json
+{
+    "checksum": "35617deab30259912a1a4f46b915d9ffd3fb4e6fd657bd573635edb9d4e317a7"
+}
+```
+
+#### Response (HTTP code 200)
 ```json
 {
     "data": {
