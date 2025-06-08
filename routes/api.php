@@ -37,9 +37,7 @@ Route::group(['as' => 'api.'], function () {
             'toggle',
             'updatePivot',
         ]);
-    Route::get('settings', [SettingsController::class, 'get'])->middleware([
-        'auth:sanctum',
-    ]);
+    Route::get('settings', [SettingsController::class, 'get']);
 })->middleware([
     'force.json.response',
 ])->withoutMiddleware(VerifyCsrfToken::class);
