@@ -1,0 +1,13 @@
+{
+  frankenphp {
+  }
+  auto_https off
+}
+
+http://:8080 {
+  root * public/
+  encode zstd br gzip
+  file_server # Serve static files first
+  # Fallback to index.php for dynamic routes
+  php_server index.php
+}

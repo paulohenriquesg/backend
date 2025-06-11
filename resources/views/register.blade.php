@@ -1,13 +1,13 @@
 @extends('page')
 
-@section('title', 'Login')
+@section('title', 'Register')
 
 @section('content')
     <div class="hero">
         <div class="hero-content flex-col lg:flex-row-reverse">
             <div class="text-center lg:text-left lg:ml-8">
-                <h1 class="text-5xl font-bold">Login</h1>
-                <p class="py-6">Access your {{ config('app.name') }} account to backup your photos and memories safely.</p>
+                <h1 class="text-5xl font-bold">Create Account</h1>
+                <p class="py-6">Create the first administrator account for {{ config('app.name') }}.</p>
             </div>
             <div class="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                 <div class="card-body">
@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login.submit') }}">
+                    <form method="POST" action="{{ route('register.submit') }}">
                         @csrf
                         <div class="form-control">
                             <label class="label">
@@ -36,18 +36,16 @@
                             </label>
                             <input type="password" name="password" placeholder="password" class="input input-bordered @error('password') input-error @enderror" required />
                         </div>
-                        <input type="hidden" name="device_name" value="{{ $deviceName ?? 'web_browser' }}">
-                        <input type="hidden" name="redirect" value="{{ $redirect }}">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Confirm Password</span>
+                            </label>
+                            <input type="password" name="password_confirmation" placeholder="confirm password" class="input input-bordered" required />
+                        </div>
                         <div class="form-control mt-6">
-                            <button type="submit" class="btn btn-primary">Login</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
                         </div>
                     </form>
-                    @if (Route::has('register'))
-                        <div class="text-center mt-4">
-                            <span>Don't have an account? </span>
-                            <a href="{{ route('register') }}" class="link link-primary">Register now</a>
-                        </div>
-                    @endif
                 </div>
             </div>
         </div>

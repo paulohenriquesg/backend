@@ -64,16 +64,16 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/chunk_uploads'),
             'serve' => true,
-            'throw' => true,
-            'report' => true,
+            'throw' => false,
+            'report' => false,
         ],
 
         'storage' => [
             'driver' => 'local',
             'root' => storage_path('app/storage'),
             'serve' => true,
-            'throw' => true,
-            'report' => true,
+            'throw' => false,
+            'report' => false,
         ],
 
     ],

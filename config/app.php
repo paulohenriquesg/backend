@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Files Nest'),
 
     /*
     |--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'redirect_hosts' => [
+    'redirect_urls_whitelist' => [
         'filesnest://auth',
         'http://127.0.0.1:8000',
     ],

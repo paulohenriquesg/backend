@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Jobs\MergeChunks;
 use App\Models\File;
 use App\Models\Status;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Orion\Http\Controllers\Controller;
 use Orion\Http\Requests\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class FileController extends Controller
 {
@@ -35,13 +37,28 @@ class FileController extends Controller
             $entity->save();
 
             for ($i = 0; $i < $request->get('chunks_count', 1); $i++) {
+                $fileId = $entity->id;
                 $entity->uploads()->create([
                     'number' => $i + 1,
-                    'file_id' => $entity->id,
+                    'file_id' => $fileId,
                     'status_id' => $inProgressStatusId,
                 ]);
             }
         });
+    }
+
+    public function performUpdate(Request $request, Model $entity, array $attributes): void
+    {
+        if ($entity->statusName === Status::COMPLETED) {
+            throw new BadRequestHttpException('Cannot update completed file');
+        }
+
+        $this->performFill($request, $entity, $attributes);
+        $entity->save();
+
+        if (isset($attributes['checksum'])) {
+            MergeChunks::dispatch($entity);
+        }
     }
 
     public function filterableBy(): array

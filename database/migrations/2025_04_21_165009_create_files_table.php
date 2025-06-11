@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('path')->nullable();
             $table->datetime('create_datetime')->index();
-            $table->string('checksum');
+            $table->string('checksum')->nullable();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Status::class)->constrained();
             $table->timestamps();

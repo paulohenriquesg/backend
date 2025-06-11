@@ -10,7 +10,6 @@ use Orion\Facades\Orion;
 Route::group(['as' => 'api.'], function () {
     Orion::resource('files', FileController::class)
         ->except([
-            'update',
             'batch',
             'batchStore',
             'batchUpdate',
@@ -38,7 +37,7 @@ Route::group(['as' => 'api.'], function () {
             'toggle',
             'updatePivot',
         ]);
-    Route::get('settings', [SettingsController::class, 'get'])->middleware([
-        'auth:sanctum',
-    ]);
-})->withoutMiddleware(VerifyCsrfToken::class);
+    Route::get('settings', [SettingsController::class, 'get']);
+})->middleware([
+    'force.json.response',
+])->withoutMiddleware(VerifyCsrfToken::class);

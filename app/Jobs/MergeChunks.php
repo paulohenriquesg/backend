@@ -28,6 +28,8 @@ class MergeChunks implements ShouldQueue
     {
         $completedStatusId = Status::where('name', Status::COMPLETED)->first()->id;
 
+        $this->file->refresh();
+
         if ($this->file->status_id === $completedStatusId) {
             Log::debug('File already completed', [
                 'file_id' => $this->file->id,
@@ -37,7 +39,21 @@ class MergeChunks implements ShouldQueue
             return;
         }
 
+        if ($this->file->checksum === null) {
+            Log::debug('File does not have checksum', [
+                'file_id' => $this->file->id,
+                'command' => 'MergeChunks',
+            ]);
+
+            return;
+        }
+
         if ($this->file->uploads()->where('status_id', '!=', $completedStatusId)->exists()) {
+            Log::debug('File does not have completed uploads', [
+                'file_id' => $this->file->id,
+                'command' => 'MergeChunks',
+            ]);
+
             return;
         }
 
@@ -48,12 +64,12 @@ class MergeChunks implements ShouldQueue
             $result = Storage::disk('storage')->makeDirectory($destinationPathOnDisk);
 
             if (! $result) {
-                Log::error('Could not create directory for in storage', [
+                Log::error('Could not create directory in the storage', [
                     'path' => $destinationPathOnDisk,
                     'command' => 'MergeChunks',
                 ]);
 
-                throw new \RuntimeException('Could not create directory for in storage');
+                throw new \RuntimeException('Could not create directory in the storage');
             }
         }
 
@@ -61,6 +77,7 @@ class MergeChunks implements ShouldQueue
 
         Log::debug('Destination file', [
             'path' => $destinationPath,
+            'file_id' => $this->file->id,
             'command' => 'MergeChunks',
         ]);
 
@@ -92,6 +109,7 @@ class MergeChunks implements ShouldQueue
 
                 Log::debug('Merging chunk', [
                     'path' => Storage::disk('chunk_uploads')->path($chunkPath),
+                    'file_id' => $this->file->id,
                     'command' => 'MergeChunks',
                 ]);
 
@@ -100,6 +118,8 @@ class MergeChunks implements ShouldQueue
                 if (! $chunkStream) {
                     Log::error('Could not open chunk file', [
                         'path' => Storage::disk('chunk_uploads')->path($chunkPath),
+                        'file_id' => $this->file->id,
+                        'chunk_id' => $upload->id,
                         'command' => 'MergeChunks',
                     ]);
 
@@ -125,6 +145,7 @@ class MergeChunks implements ShouldQueue
             if (! touch(Storage::disk('storage')->path($destinationPathNameOnDisk), $this->file->create_datetime->timestamp)) {
                 Log::error('Could change file creation timestamp', [
                     'path' => Storage::disk('storage')->path($destinationPathNameOnDisk),
+                    'file_id' => $this->file->id,
                     'command' => 'MergeChunks',
                 ]);
             }
@@ -174,6 +195,7 @@ class MergeChunks implements ShouldQueue
         if (Storage::disk('chunk_uploads')->exists($this->file->id)) {
             Log::debug('Deleting chunks', [
                 'path' => Storage::disk('chunk_uploads')->path($this->file->id),
+                'file_id' => $this->file->id,
                 'command' => 'MergeChunks',
             ]);
 

@@ -26,7 +26,7 @@ class UploadController extends RelationController
     {
         if ($request->header('content-type') !== 'application/octet-stream') {
             Log::error('Invalid content type', [
-                'content_type' => $request->getContentType(),
+                'content_type' => $request->header('content-type'),
                 'upload_id' => $entity->id,
             ]);
 

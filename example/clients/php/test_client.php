@@ -134,11 +134,8 @@ echo "------------------------------------\n";
 echo "Step 1: Creating file record...\n";
 $createFileData = [
     'name' => $fileName,
-    'checksum' => $fileChecksum,
     'create_datetime' => '2020-01-01 00:00:00',
-    'chunks_count' => $totalChunks, // Added chunks_count
-    // Add any other required fields based on the actual API requirements
-    // 'create_datetime' might be set server-side
+    'chunks_count' => $totalChunks,
 ];
 $createResponse = send_request($createFileEndpoint, 'POST', $createFileData);
 
@@ -284,9 +281,27 @@ if ($processedChunks !== $totalChunks && $fileSize > 0) { // Check only if file 
 }
 
 echo "------------------------------------\n";
-echo "All chunks processed successfully.\n"; // Changed message slightly
+echo "All chunks uploaded successfully. Now finalizing...\n";
+
+// 3. Finalize File Upload (Update Checksum)
+// This step is added to send the checksum after all chunks are uploaded.
+// The backend will use this checksum to verify the file and trigger merging.
+echo "Step 3: Finalizing file upload by sending checksum...\n";
+$updateFileUrl = $apiBaseUrl.'/files/'.$fileId;
+$updateFileData = ['checksum' => $fileChecksum];
+
+$finalizeResponse = send_request($updateFileUrl, 'PATCH', $updateFileData);
+
+if (! $finalizeResponse['success']) {
+    echo 'Error finalizing file upload: '.($finalizeResponse['error'] ?? json_encode($finalizeResponse['body']))."\n";
+    // Optionally, you might want to exit here if finalization is critical
+    // exit(1);
+} else {
+    echo "File finalized successfully. Checksum updated. HTTP Status: {$finalizeResponse['http_code']}\n";
+}
 
 // Remove the optional finalize step as merging is triggered by the backend
+// The comment above is now addressed by the new Step 3.
 
 echo "Upload process complete for file ID: {$fileId}\n";
 exit(0);
