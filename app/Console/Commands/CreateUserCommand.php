@@ -4,11 +4,12 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
-class CreateUserCommand extends Command
+class CreateUserCommand extends Command implements PromptsForMissingInput
 {
     /**
      * The name and signature of the console command.
