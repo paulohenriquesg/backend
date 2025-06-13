@@ -17,6 +17,7 @@ post_max_size = ${POST_MAX_SIZE}
 upload_max_filesize = ${POST_MAX_SIZE}
 memory_limit = ${MEMORY_LIMIT}
 max_execution_time = ${MAX_EXECUTION_TIME}
+expose_php = Off
 
 ; OPcache settings
 opcache.enable=1

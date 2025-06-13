@@ -10,4 +10,6 @@ http://:8080 {
   file_server # Serve static files first
   # Fallback to index.php for dynamic routes
   php_server index.php
+
+  {$IMPORT_HTTP_LOG}
 }

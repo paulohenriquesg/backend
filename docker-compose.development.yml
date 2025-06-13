@@ -1,0 +1,19 @@
+services:
+  files-nest:
+    build:
+      context: .
+      dockerfile: development.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+      - ./docker/Caddyfile:/etc/frankenphp/Caddyfile
+    ports:
+      - 8080:8080
+    environment:
+      - CADDY_GLOBAL_OPTIONS="debug"
+      - POST_MAX_SIZE=100M
+      - MEMORY_LIMIT=150M
+      - APP_DEBUG=true
+      - TZ=Europe/Berlin
+      - IMPORT_HTTP_LOG=import /app/docker/http_log.caddy
+      - REDIRECT_URLS_WHITELIST=http://127.0.0.1:8080,http://localhost:8080

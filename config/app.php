@@ -123,8 +123,7 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'redirect_urls_whitelist' => [
+    'redirect_urls_whitelist' => array_merge([
         'filesnest://auth',
-        'http://127.0.0.1:8000',
-    ],
+    ], explode(',', env('REDIRECT_URLS_WHITELIST', ''))),
 ];

@@ -21,18 +21,19 @@ pnpm build
 * `pnpm dev`
 * `pnpm build`
 
+### Docker
+* `docker compose -f docker-compose.development.yml up`
+
 ### Queues
 * `php artisan queue:listen` run a scheduled jobs listener
 
 ### Login
-Redirect should be whitelisted in `config/app.php` file.
-```php
-'redirect_urls_whitelist' => [
-    'http://127.0.0.1:8000',
-],
+Redirect should be whitelisted in `REDIRECT_URLS_WHITELIST` environment variable. It should be a comma-separated list of URLs.
+```dotenv
+REDIRECT_URLS_WHITELIST=http://127.0.0.1:8080,http://localhost:8080
 ```
 
-* Open the following link in your browser http://127.0.0.1:8000/login?redirect=http://127.0.0.1:8000&device_name=iphone
+* Open the following link in your browser http://127.0.0.1:8080/login?redirect=http://127.0.0.1:8080&device_name=browser
 * Login with the user created above.
 * A token could be found in a `token` cookie after the redirect.
 
