@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Exceptions\ChecksumMatchException;
 use App\Models\File;
 use App\Models\Status;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -152,7 +153,17 @@ class MergeChunks implements ShouldQueue
 
             $this->deleteChunksFolder();
 
-        } catch (\RuntimeException $e) {
+        } catch (ChecksumMatchException $exception) {
+            if (isset($chunkStream) && is_resource($chunkStream)) {
+                fclose($chunkStream);
+            }
+
+            if (is_resource($destinationStream)) {
+                fclose($destinationStream);
+            }
+
+            throw $exception;
+        } catch (\RuntimeException $exception) {
             if (isset($chunkStream) && is_resource($chunkStream)) {
                 fclose($chunkStream);
             }
@@ -164,7 +175,7 @@ class MergeChunks implements ShouldQueue
             $this->file->status_id = Status::where('name', Status::FAILED_CHUNKS_MERGE)->first()->id;
             $this->file->save();
 
-            throw $e;
+            throw $exception;
         }
     }
 
@@ -186,7 +197,7 @@ class MergeChunks implements ShouldQueue
             $this->file->status_id = Status::where('name', Status::FAILED_CHECKSUM)->first()->id;
             $this->file->save();
 
-            throw new \Exception('File checksum does not match');
+            throw new ChecksumMatchException;
         }
     }
 
