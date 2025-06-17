@@ -48,7 +48,8 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
         gd \
         intl \
         zip \
-        opcache
+        opcache \
+        redis
 
 # Copy built vendor dependencies
 COPY --from=vendor /app/vendor /app/vendor

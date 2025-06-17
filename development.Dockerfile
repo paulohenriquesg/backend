@@ -15,7 +15,8 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
         gd \
         intl \
         zip \
-        xdebug
+        xdebug \
+        redis
 
 EXPOSE 8080
 
