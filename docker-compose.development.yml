@@ -1,4 +1,9 @@
 services:
+  queue:
+    image: eqalpha/keydb:latest
+    ports:
+      - "6379:6379"
+
   files-nest:
     build:
       context: .
@@ -17,3 +22,7 @@ services:
       - TZ=Europe/Berlin
       - IMPORT_HTTP_LOG=import /app/docker/http_log.caddy
       - REDIRECT_URLS_WHITELIST=http://127.0.0.1:8080,http://localhost:8080
+      - QUEUE_CONNECTION=redis
+      - REDIS_QUEUE_CONNECTION=queue
+    depends_on:
+      - queue

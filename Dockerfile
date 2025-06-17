@@ -32,7 +32,8 @@ ENV SERVER_NAME=:8080 \
     APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
-    QUEUE_CONNECTION=database \
+    QUEUE_CONNECTION=redis \
+    REDIS_QUEUE_CONNECTION=queue \
     DB_QUEUE_CONNECTION=queues-sqlite \
     POST_MAX_SIZE=50M
 
