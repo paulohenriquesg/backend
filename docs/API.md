@@ -12,7 +12,6 @@ Get the current settings of the application. The response includes data about th
 
 #### Headers
 ```http
-Authorization: Bearer {token}
 Accept: application/json
 Content-Type: application/json
 ```

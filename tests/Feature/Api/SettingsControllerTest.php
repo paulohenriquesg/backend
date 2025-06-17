@@ -20,7 +20,13 @@ class SettingsControllerTest extends TestCase
     public function test_get_settings_unauthenticated(): void
     {
         $response = $this->getJson('/api/settings');
-        $response->assertUnauthorized();
+
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'upload_max_size' => Settings::getPostMaxSize(),
+            ],
+        ]);
     }
 
     public function test_get_settings_authenticated(): void
