@@ -5,9 +5,10 @@
 
 FilesNest is a file storage server that allows you to backup your iCloud photos and videos. It is designed to be self-hosted, and easy to use.
 
-[![GitHub License](https://img.shields.io/github/license/files-nest/backend)](https://github.com/files-nest/backend/LICENSE.md)
-![CI](https://img.shields.io/github/actions/workflow/status/files-nest/backend/ci.yml?branch=main&label=CI)
-[![GitHub Issues](https://img.shields.io/github/issues/files-nest/backend)](https://github.com/files-nest/backend/issues)
+[![GitHub License](https://img.shields.io/github/license/files-nest/backend?style=flat-square&labelColor=black)](https://github.com/files-nest/backend/LICENSE.md)
+[![CI](https://img.shields.io/github/actions/workflow/status/files-nest/backend/ci.yml?branch=main&label=CI&style=flat-square&labelColor=black)](#)
+[![GitHub Issues](https://img.shields.io/github/issues/files-nest/backend?style=flat-square&labelColor=black)](https://github.com/files-nest/backend/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/files-nest/backend?style=flat-square&labelColor=black)](https://github.com/files-nest/backend/stargazers)
 
 ## 👋🏻 Getting Started
 
