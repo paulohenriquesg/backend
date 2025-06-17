@@ -7,15 +7,27 @@ on:
     branches: [ main ]
 
 jobs:
-  phpunit:
+  ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.2', '8.3', '8.4']
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: ${{ matrix.php-version }}
+          tools: composer
+
       - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist
+        run: composer install --no-progress --no-suggest --prefer-dist
+
       - name: Run PHPUnit
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit tests
+
+      - name: Run Pint
+        run: ./vendor/bin/pint --test
