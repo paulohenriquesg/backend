@@ -33,7 +33,7 @@ ENV SERVER_NAME=:8080 \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
     QUEUE_CONNECTION=redis \
-    REDIS_QUEUE_CONNECTION=queue \
+    REDIS_HOST=queue \
     DB_QUEUE_CONNECTION=queues-sqlite
 
 WORKDIR /app
