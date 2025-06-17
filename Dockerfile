@@ -34,8 +34,7 @@ ENV SERVER_NAME=:8080 \
     LOG_CHANNEL=stderr \
     QUEUE_CONNECTION=redis \
     REDIS_QUEUE_CONNECTION=queue \
-    DB_QUEUE_CONNECTION=queues-sqlite \
-    POST_MAX_SIZE=50M
+    DB_QUEUE_CONNECTION=queues-sqlite
 
 WORKDIR /app
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \

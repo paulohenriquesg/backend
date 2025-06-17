@@ -2,8 +2,8 @@
 set -e
 
 # Default values if environment variables are not set
-: ${POST_MAX_SIZE:=128M}
-: ${MEMORY_LIMIT:=128M}
+: ${POST_MAX_SIZE:=100M}
+: ${MEMORY_LIMIT:=150M}
 : ${MAX_EXECUTION_TIME:=60}
 
 # Export the variables so envsubst can use them
