@@ -1,10 +1,4 @@
 services:
-  queue:
-    image: eqalpha/keydb:latest
-    ports:
-      - "6379:6379"
-    restart: unless-stopped
-
   files-nest:
     image: ghcr.io/files-nest/backend:latest
     restart: unless-stopped
@@ -17,3 +11,9 @@ services:
       - APP_KEY=base64:YOUR_APP_KEY_HERE
     depends_on:
       - queue
+
+  queue:
+    image: eqalpha/keydb:latest
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
