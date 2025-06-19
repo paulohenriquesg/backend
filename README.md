@@ -35,16 +35,22 @@ The Docker Compose setup includes:
 - Volume mounts for persistent data storage and database
 
 * Copy [docker-compose.yml](https://raw.githubusercontent.com/files-nest/backend/refs/heads/main/docker-compose.yml) file.
-* Set up `YOUR_STORAGE_PATH_HERE` to your desired storage path.
-* Set up `YOUR_DATABASE_PATH_HERE` to your desired database path.
+* Replace `YOUR_STORAGE_PATH_HERE` by your desired storage path.
+* Replace `YOUR_DATABASE_PATH_HERE` by your desired database path.
 * Change `9999` port to your desired port.
 * Run `docker compose up -d` to start the application.
 * If it's a first run generate an application key by running `docker compose exec files-nest make generate-key`. Save the generated key. Changing it will invalidate existing encrypted data, causing issues with user data and stored information.
 * Set up the `APP_KEY` environment variable. Example `APP_KEY=base64:ngsvSN2tyM1kjTWCka1IjkyuNMqMlpyHhgTj36KEJDs=`
 
+> [!NOTE]
+> From this moment on, we are going to assume your server is at 127.0.0.1, port 9999.
+
 ### Create a user
-* If it's a first user you can open a web page SERVER:PORT/register. For example, http://127.0.0.1:8080/register
-* Or run `make create-user` from the server container
+There are two ways to create a new user:
+* Using the web interface:
+    - accessing the `/register` URL, like http://127.0.0.1:9999/register
+* Using the command line (inside of the server container):
+    - `make create-user`
 
 ## ⌨️ Local Development
 
@@ -69,10 +75,10 @@ make dev/migrate
 ### Login
 Redirect should be whitelisted in `REDIRECT_URLS_WHITELIST` environment variable. It should be a comma-separated list of URLs.
 ```dotenv
-REDIRECT_URLS_WHITELIST=http://127.0.0.1:8080,http://localhost:8080
+REDIRECT_URLS_WHITELIST=http://127.0.0.1:9999,http://localhost:9999
 ```
 
-* Open the following link in your browser http://127.0.0.1:8080/login?redirect=http://127.0.0.1:8080&device_name=browser
+* Open the following link in your browser http://127.0.0.1:9999/login?redirect=http://127.0.0.1:9999&device_name=browser
 * Login with the user created above.
 * A token could be found in a URL after the redirect.
 
