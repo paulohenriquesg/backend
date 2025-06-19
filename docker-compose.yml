@@ -15,5 +15,5 @@ services:
   queue:
     image: eqalpha/keydb:latest
     ports:
-      - "6379:6379"
+      - 6379:6379
     restart: unless-stopped
